@@ -1,0 +1,31 @@
+.markdown-clipboard-button::after {
+	/*
+	display: inline-block;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	font: var(--fa-font-regular);
+	content: '\f0c5';
+	*/
+}
+
+.markdown-clipboard-button {
+	border: none;
+	cursor: pointer;
+	padding: 5px 10px;
+	font-size: 10px;
+	border-radius: 5px;
+	transition: all 250ms ease-out;
+}
+
+.markdown-clipboard-button:hover {
+	background-color: rgba(77, 77, 77, 0.3);
+}
+
+.markdown-clipboard-button:active {
+	transform: scale(0.95);
+}
+
+.markdown-clipboard-button.copied {
+	background-color: rgba(109, 11, 112, 0.2);
+	color: #433f86;
+}

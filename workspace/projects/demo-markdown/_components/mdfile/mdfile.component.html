@@ -1,0 +1,24 @@
+<h1>View Local Markdown Files (*.md)</h1>
+
+<hr>
+
+<h3>Binary Search</h3>
+
+<markdown 
+	clipboard
+	ngPreserveWhitespaces 
+	lineNumbers 
+	lineHighlight 
+	[line]="'1, 6, 9-24'" 
+	[src]="'assets/md/binary-search.md'" 
+	(load)="onLoad($event)"
+	(error)="onError($event)">
+</markdown>
+
+<h3>Fibonacci</h3>
+
+<markdown [src]="'assets/md/fibonacci.md'">
+</markdown>
+
+<markdown [src]="'assets/md/notes1.md'">
+</markdown>
