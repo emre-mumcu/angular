@@ -40,3 +40,5 @@ https://dummyjson.com/auth/login
 # References
 * https://dummyjson.com/docs/auth
 * https://app.quicktype.io/
+* https://json-generator.com/
+* https://transform.tools/json-schema-to-typescript
