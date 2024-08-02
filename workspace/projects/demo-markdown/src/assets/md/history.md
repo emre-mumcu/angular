@@ -1,6 +1,6 @@
 # ngx-markdown
 
-To add ngx-markdown along with the required marked library to your package.json use the following commands.
+To add ngx-markdown along with the required marked library to your project, use the following command:
 
 ```zsh
 % npm install ngx-markdown marked
@@ -25,7 +25,7 @@ providers: [
 ]
 ```
 
-## Modules Configuration
+### Modules Configuration
 You must import MarkdownModule inside your main application module app.module.ts with forRoot to be able to use the markdown component, directive, pipe and/or MarkdownService.
 
 ```ts
@@ -45,8 +45,8 @@ imports: [
 ],
 ```
 
-## Remote file configuration
-If you want to use the [src] attribute to directly load a remote file, in order to keep only one instance of HttpClient and avoid issues with interceptors, you also have to provide HttpClient:
+### Remote file configuration
+If you want to use the [src] attribute to directly load a file over http:
 
 ```ts
 // Standalone Components
@@ -70,11 +70,13 @@ imports: [
 ]
 ```
 
+## Parsing Markdown
+
 ngx-markdown provides different approaches to help you parse markdown to your application depending on your needs.  
 
 As of Angular 6, the template compiler strips whitespace by default. Use `ngPreserveWhitespaces` directive to preserve whitespaces such as newlines in order for the markdown-formatted content to render as intended.
 
-## Component
+### Component
 You can use markdown component to either parse static markdown directly from your HTML markup, load the content from a remote URL using src property or bind a variable to your component using data property. You can get a hook on load complete using load output event property, on loading error using error output event property or when parsing is completed using ready output event property.
 
 ``` html
@@ -83,7 +85,7 @@ You can use markdown component to either parse static markdown directly from you
   # Markdown
 </markdown>
 
-<!-- loaded from remote url -->
+<!-- loaded over http -->
 <markdown
   [src]="'path/to/file.md'"
   (load)="onLoad($event)"
@@ -103,10 +105,36 @@ You can use markdown component to either parse static markdown directly from you
 </markdown>
 ```
 
-## Directive
+### Directive
 The same way the component works, you can use markdown directive to accomplish the same thing.
 
-## Pipe
+```html
+<!-- static markdown -->
+<div markdown ngPreserveWhitespaces>
+  # Markdown
+</div>
+
+<!-- loaded from remote url -->
+<div markdown
+  [src]="'path/to/file.md'"
+  (load)="onLoad($event)"
+  (error)="onError($event)">
+</div>
+
+<!-- variable binding -->
+<div markdown
+  [data]="markdown"
+  (ready)="onReady()">
+</div>
+
+<!-- inline parser, omitting rendering top-level paragraph -->
+<div markdown
+  [data]="markdown"
+  [inline]="true">
+</div>
+```
+
+### Pipe
 Using markdown pipe to transform markdown to HTML allow you to chain pipe transformations and will update the DOM when value changes. It is important to note that, because the marked parsing method returns a Promise, it requires the use of the async pipe.
 
 ```html
@@ -137,7 +165,7 @@ export interface MarkdownPipeOptions {
 }
 ```
 
-## Service
+### Service
 You can use MarkdownService to have access to markdown parsing, rendering and syntax highlight methods.
 
 ```
@@ -155,66 +183,6 @@ export class ExampleComponent implements OnInit {
 }
 ```
 
-# Renderer
-Tokens can be rendered in a custom manner by either...
-
-* providing the renderer property with the MarkedOptions when importing MarkdownModule.forRoot() into your main application module (see Configuration section)
-* using MarkdownService exposed renderer
-
-Here is an example of overriding the default heading token rendering through MarkdownService by adding an embedded anchor tag like on GitHub:
-
-```
-import { Component, OnInit } from '@angular/core';
-import { MarkdownService } from 'ngx-markdown';
-
-@Component({
-  selector: 'app-example',
-  template: '<markdown># Heading</markdown>',
-})
-export class ExampleComponent implements OnInit {
-  constructor(private markdownService: MarkdownService) { }
-
-  ngOnInit() {
-    this.markdownService.renderer.heading = (text: string, level: number) => {
-      const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
-      return '<h' + level + '>' +
-               '<a name="' + escapedText + '" class="anchor" href="#' + escapedText + '">' +
-                 '<span class="header-link"></span>' +
-               '</a>' + text +
-             '</h' + level + '>';
-    };
-  }
-}
-```
-This code will output the following HTML:
-```
-<h1>
-  <a name="heading" class="anchor" href="#heading">
-    <span class="header-link"></span>
-  </a>
-  Heading
-</h1>
-```
-https://marked.js.org/#/USING_PRO.md#renderer
-
-## Re-render Markdown
-In some situations, you might need to re-render markdown after making changes. If you've updated the text this would be done automatically, however if the changes are internal to the library such as rendering options, you will need to inform the MarkdownService that it needs to update.
-
-To do so, inject the MarkdownService and call the reload() function as shown below.
-
-```
-import { MarkdownService } from 'ngx-markdown';
-
-constructor(
-  private markdownService: MarkdownService,
-) { }
-
-update() {
-  this.markdownService.reload();
-}
-```
-
-
 ## Syntax highlight
 When using static markdown you are responsible to provide the code block with related language.
 
@@ -224,15 +192,21 @@ When using static markdown you are responsible to provide the code block with re
     const myProp: string = 'value';
 +  ```
 </markdown>
+```
+
 When using remote URL ngx-markdown will use the file extension to automatically resolve the code language.
 
+```html
 <!-- will use html highlights -->
 <markdown [src]="'path/to/file.html'"></markdown>
 
 <!-- will use php highlights -->
 <markdown [src]="'path/to/file.php'"></markdown>
+```
+
 When using variable binding you can optionally use language pipe to specify the language of the variable content (default value is markdown when pipe is not used).
 
+```html
 <markdown [data]="markdown | language : 'typescript'"></markdown>
 
 ```
@@ -278,17 +252,8 @@ You can bypass sanitization using the markdown component, directive or pipe usin
 <div [innerHTML]="markdown | markdown : { disableSanitizer: true } | async"></div>
 ```
 
-https://www.npmjs.com/package/ngx-markdown#configuration
+# References
 
-
-
-https://www.npmjs.com/package/ngx-markdown
-https://jfcere.github.io/ngx-markdown/get-started
-https://marked.js.org/#/USING_PRO.md#renderer
-https://github.com/jfcere/ngx-markdown
-
-
-
-npm install ngx-markdown marked
-npm install ngx-markdown marked@^12.0.0
-npm install prismjs@^1.28.0
+* https://www.npmjs.com/package/ngx-markdown
+* https://jfcere.github.io/ngx-markdown
+* https://github.com/jfcere/ngx-markdown
