@@ -3,6 +3,7 @@ import { LoginRequest } from '../../../../demo-guards/src/_services/account.serv
 import { FormsModule } from '@angular/forms';
 import { AccountService } from '../../_services/account.service';
 import { LoginModel } from '../../_models/login-model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,18 +14,16 @@ import { LoginModel } from '../../_models/login-model';
 export class LoginComponent {
 
 	private accountService = inject(AccountService);
-	
-	loggedIn = false;
+
+	private router = inject(Router);
 
 	// model: LoginRequestModel = {};
 	model: LoginModel = { username:"emilys", password:"emilyspass", expiresInMins: 30 };
-
-
+	
 	login() {
 		this.accountService.login(this.model).subscribe({
 			next: resposne => {
-				console.log(resposne);
-				this.loggedIn = true;
+				this.router.navigateByUrl("/user");
 			},
 			error: error => console.log(error)
 		});

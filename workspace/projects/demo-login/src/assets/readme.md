@@ -1,3 +1,31 @@
+# ngClass
+
+<!-- Normal HTML -->
+<input placeholder="some text">
+<!-- Interpolation -->
+<input placeholder="{{ variable }}">
+<!-- Property Binding -->
+<input [placeholder]="variable">
+
+
+<div [ngClass]="'first second'">
+<div [ngClass]="propName">
+<div [ngClass]="['first', 'second']">
+<div [ngClass]="{first: true, second: true, third: true}">
+<div [ngClass]="{'first second': true}">
+<td [ngClass]="className"></td>
+
+<td [ngClass]="val > 10 ? 'red' : 'green'">{{ val }}</td>
+<input type="text" [ngClass]="control.isInvalid ? 'error' : ''" />
+<input type="text" [class.error]="control.isInvalid" />
+<td [ngClass]="getClassOf(val)">{{ val }}</td>
+<td [ngClass]="{ low: val >= 0 && val <=5, medium: val > 5 && val <= 10, high: val > 10}">
+  {{ val }}
+</td>
+
+
+
+
 # Template Forms
 
 ```html
@@ -12,3 +40,112 @@
 ```
 
 Angular services are singletons, services are created when the application starts and disposed when application ends. It is a good place to store states and make http requests.
+
+```ts
+import { Pipe, PipeTransform } from '@angular/core';
+
+// ng generate pipe _pipes/prettyjson
+
+@Pipe({
+  name: 'prettyjson',
+  standalone: true
+})
+export class PrettyjsonPipe implements PipeTransform {
+
+  transform(value: unknown, ...args: unknown[]): unknown {
+	  return JSON.stringify(value, null, 2)
+		  .replace(/ /g, '&nbsp;') // note the usage of `/ /g` instead of `' '` in order to replace all occurences
+		  .replace(/\n/g, '<br/>'); // same here
+  }
+
+}
+```
+
+# ngClass
+
+The ngClass directive in Angular is used to dynamically add or remove CSS classes based on conditions. Here's how you can use ngClass in various scenarios:
+
+You can add a static class using ngClass:
+
+<div [ngClass]="'my-class'">This div has a static class</div>
+
+Conditional Class
+You can conditionally apply a class based on a boolean expression:
+
+<div [ngClass]="{ 'active': isActive }">This div is active if isActive is true</div>
+
+Using Multiple Classes
+You can apply multiple classes based on different conditions:
+
+<div [ngClass]="{ 'active': isActive, 'disabled': isDisabled }">
+  This div has 'active' class if isActive is true and 'disabled' class if isDisabled is true
+</div>
+
+Static and Conditional Classes Together
+You can combine static and conditional classes:
+
+<div [ngClass]="['static-class', { 'active': isActive }]">
+  This div always has 'static-class' and has 'active' if isActive is true
+</div>
+
+
+# Using ngClass in a Standalone Component
+
+If you're using standalone components, the setup is similar. Ensure you import CommonModule if needed for Angular directives like ngClass.
+
+## Standalone Component Class (TypeScript)
+
+```ts
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-ng-class-demo',
+  templateUrl: './ng-class-demo.component.html',
+  styleUrls: ['./ng-class-demo.component.css'],
+  standalone: true,
+  imports: [CommonModule]
+})
+export class NgClassDemoComponent {
+  isActive = true;
+  isDisabled = false;
+
+  toggleActive(): void {
+    this.isActive = !this.isActive;
+  }
+
+  toggleDisabled(): void {
+    this.isDisabled = !this.isDisabled;
+  }
+}
+```
+
+## Standalone Component Template (HTML)
+
+```html
+<div>
+  <h3>ngClass Demo</h3>
+
+  <button (click)="toggleActive()">Toggle Active</button>
+  <button (click)="toggleDisabled()">Toggle Disabled</button>
+
+  <div [ngClass]="{ 'active': isActive, 'disabled': isDisabled }">
+    This div's classes are controlled by ngClass
+  </div>
+</div>
+```
+
+## Standalone Component Styles (CSS)
+```css
+.active {
+  color: green;
+  font-weight: bold;
+}
+
+.disabled {
+  color: gray;
+  text-decoration: line-through;
+}
+```
+
+By using ngClass, you can dynamically add or remove classes based on your component's logic, making it a powerful tool for styling your Angular applications.

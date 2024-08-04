@@ -1,1 +1,19 @@
-<p>user works!</p>
+<div class="row">
+	<div class="col text-break">
+		<h6 class="mb-4">Current User</h6>
+		<pre>
+		<div [innerHTML]="accountService.currentUser() | prettyjson"></div>
+		</pre>		
+	</div>
+</div>
+
+<div class="row">
+	<div class="col text-break">
+		<h6 class="mb-4">Current User Detail</h6>
+		<button [ngClass]="userDetailBtnClass" (click)="getAuthUserInfo()">{{userDetailBtnName}}</button>
+		<hr>
+		<pre>
+			<div [innerHTML]="accountService.currentUserDetail() | prettyjson"></div>
+		</pre>
+	</div>
+</div>
