@@ -1,6 +1,62 @@
-# ngs-spinner
+# ngx-toastr
 
-Using npm (* this one is used):
+https://www.npmjs.com/package/ngx-toastr
+https://ngx-toastr.vercel.app/
+
+% npm install ngx-toastr
+% npm install @angular/animations
+
+Styles
+
+```json
+"styles": [
+  "styles.scss",
+  "node_modules/ngx-toastr/toastr.css"
+]
+```
+
+Service Registration (standalone)
+
+```ts
+import { AppComponent } from "./src/app.component";
+import { provideAnimations } from "@angular/platform-browser/animations";
+
+import { provideToastr } from "ngx-toastr";
+
+bootstrapApplication(AppComponent, {
+	providers: [
+		provideAnimations(), // required animations providers
+		provideToastr(), // Toastr providers
+		// or
+		provideToastr({
+			timeOut: 10000,
+			positionClass: "toast-bottom-right",
+			preventDuplicates: true,
+		}),
+	],
+});
+```
+
+Use
+
+```ts
+import { ToastrService } from 'ngx-toastr';
+
+@Component({...})
+export class YourComponent {
+  constructor(private toastr: ToastrService) {}
+
+  showSuccess() {
+    this.toastr.success('Hello world!', 'Toastr fun!');
+  }
+}
+```
+
+# ngx-spinner
+
+https://www.npmjs.com/package/ngx-spinner
+
+Using npm (\* this one is used):
 % npm i ngx-spinner
 
 Using angular-cli:
@@ -8,36 +64,38 @@ Using angular-cli:
 
 // angular.json
 {
-  "styles": [
-    "node_modules/ngx-spinner/animations/timer.css"
-  ]
+"styles": [
+"node_modules/ngx-spinner/animations/timer.css"
+]
 }
 
 Import BrowserAnimationsModule and NgxSpinnerModule
 
 // app.config.ts
 export const appConfig: ApplicationConfig = {
-	providers: [
-		importProvidersFrom(NgxSpinnerModule),
-		importProvidersFrom([BrowserAnimationsModule])
-	]
+providers: [
+importProvidersFrom(NgxSpinnerModule),
+//importProvidersFrom([BrowserAnimationsModule])
+provideAnimations(),
+]
 };
 
 // create a service for spinner
-% ng g s _services/spinner
+% ng g s \_services/spinner
 
 # Interceptors
 
-ng g interceptor _inteceptors/loading --skip-tests
+ng g interceptor \_inteceptors/loading --skip-tests
 
 Update app.config.ts
 
 export const appConfig: ApplicationConfig = {
-	providers: [
+providers: [
 
-		provideHttpClient(withInterceptors([loadingInterceptor])),
+    	provideHttpClient(withInterceptors([loadingInterceptor])),
 
-	]
+    ]
+
 };
 
 Add spinner component to app.component.ts
@@ -49,10 +107,10 @@ Add spinner component to app.component.ts
 Import NgxSpinnerComponent in app.component.ts
 
 @Component({
-	selector: 'app-root',
-	standalone: true,
-	imports: [NgxSpinnerComponent],
-	templateUrl: './app.component.html'
+selector: 'app-root',
+standalone: true,
+imports: [NgxSpinnerComponent],
+templateUrl: './app.component.html'
 })
 export class AppComponent
 
@@ -64,7 +122,6 @@ export class AppComponent
 <input placeholder="{{ variable }}">
 <!-- Property Binding -->
 <input [placeholder]="variable">
-
 
 <div [ngClass]="'first second'">
 <div [ngClass]="propName">
@@ -81,18 +138,31 @@ export class AppComponent
   {{ val }}
 </td>
 
-
-
-
 # Template Forms
 
 ```html
 <!-- Add FormsModule to component -->
 <!-- #loginForm is template reference variable -->
- <!-- [()] is used for two-way binding -->
-<form #loginForm="ngForm" (ngSubmit)="login()" class="d-flex" autocomplete="off">
-	<input name="username" [(ngModel)]="model.username" class="form-control me-2" placeholder="Username">
-	<input name="password" [(ngModel)]="model.password" class="form-control me-2" placeholder="Password" type="password">
+<!-- [()] is used for two-way binding -->
+<form
+	#loginForm="ngForm"
+	(ngSubmit)="login()"
+	class="d-flex"
+	autocomplete="off"
+>
+	<input
+		name="username"
+		[(ngModel)]="model.username"
+		class="form-control me-2"
+		placeholder="Username"
+	/>
+	<input
+		name="password"
+		[(ngModel)]="model.password"
+		class="form-control me-2"
+		placeholder="Password"
+		type="password"
+	/>
 	<button class="btn btn-primary" type="submit">Login</button>
 </form>
 ```
@@ -100,22 +170,20 @@ export class AppComponent
 Angular services are singletons, services are created when the application starts and disposed when application ends. It is a good place to store states and make http requests.
 
 ```ts
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from "@angular/core";
 
 // ng generate pipe _pipes/prettyjson
 
 @Pipe({
-  name: 'prettyjson',
-  standalone: true
+	name: "prettyjson",
+	standalone: true,
 })
 export class PrettyjsonPipe implements PipeTransform {
-
-  transform(value: unknown, ...args: unknown[]): unknown {
-	  return JSON.stringify(value, null, 2)
-		  .replace(/ /g, '&nbsp;') // note the usage of `/ /g` instead of `' '` in order to replace all occurences
-		  .replace(/\n/g, '<br/>'); // same here
-  }
-
+	transform(value: unknown, ...args: unknown[]): unknown {
+		return JSON.stringify(value, null, 2)
+			.replace(/ /g, "&nbsp;") // note the usage of `/ /g` instead of `' '` in order to replace all occurences
+			.replace(/\n/g, "<br/>"); // same here
+	}
 }
 ```
 
@@ -146,7 +214,6 @@ You can combine static and conditional classes:
   This div always has 'static-class' and has 'active' if isActive is true
 </div>
 
-
 # Using ngClass in a Standalone Component
 
 If you're using standalone components, the setup is similar. Ensure you import CommonModule if needed for Angular directives like ngClass.
@@ -154,27 +221,27 @@ If you're using standalone components, the setup is similar. Ensure you import C
 ## Standalone Component Class (TypeScript)
 
 ```ts
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: 'app-ng-class-demo',
-  templateUrl: './ng-class-demo.component.html',
-  styleUrls: ['./ng-class-demo.component.css'],
-  standalone: true,
-  imports: [CommonModule]
+	selector: "app-ng-class-demo",
+	templateUrl: "./ng-class-demo.component.html",
+	styleUrls: ["./ng-class-demo.component.css"],
+	standalone: true,
+	imports: [CommonModule],
 })
 export class NgClassDemoComponent {
-  isActive = true;
-  isDisabled = false;
+	isActive = true;
+	isDisabled = false;
 
-  toggleActive(): void {
-    this.isActive = !this.isActive;
-  }
+	toggleActive(): void {
+		this.isActive = !this.isActive;
+	}
 
-  toggleDisabled(): void {
-    this.isDisabled = !this.isDisabled;
-  }
+	toggleDisabled(): void {
+		this.isDisabled = !this.isDisabled;
+	}
 }
 ```
 
@@ -182,27 +249,28 @@ export class NgClassDemoComponent {
 
 ```html
 <div>
-  <h3>ngClass Demo</h3>
+	<h3>ngClass Demo</h3>
 
-  <button (click)="toggleActive()">Toggle Active</button>
-  <button (click)="toggleDisabled()">Toggle Disabled</button>
+	<button (click)="toggleActive()">Toggle Active</button>
+	<button (click)="toggleDisabled()">Toggle Disabled</button>
 
-  <div [ngClass]="{ 'active': isActive, 'disabled': isDisabled }">
-    This div's classes are controlled by ngClass
-  </div>
+	<div [ngClass]="{ 'active': isActive, 'disabled': isDisabled }">
+		This div's classes are controlled by ngClass
+	</div>
 </div>
 ```
 
 ## Standalone Component Styles (CSS)
+
 ```css
 .active {
-  color: green;
-  font-weight: bold;
+	color: green;
+	font-weight: bold;
 }
 
 .disabled {
-  color: gray;
-  text-decoration: line-through;
+	color: gray;
+	text-decoration: line-through;
 }
 ```
 

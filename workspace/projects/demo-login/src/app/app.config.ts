@@ -5,7 +5,8 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { loadingInterceptor } from '../_interceptors/loading.interceptor';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
+import { provideToastr } from 'ngx-toastr';
 
 export const appConfig: ApplicationConfig = {
 	providers: [
@@ -13,6 +14,12 @@ export const appConfig: ApplicationConfig = {
 		provideRouter(routes),
 		provideHttpClient(withInterceptors([loadingInterceptor])),
 		importProvidersFrom(NgxSpinnerModule),
-		importProvidersFrom([BrowserAnimationsModule])
+		// importProvidersFrom([BrowserAnimationsModule]),
+		provideAnimations(),
+		provideToastr({
+			positionClass: 'toast-bottom-right',
+			preventDuplicates: true,
+			timeOut: 2500
+		}),
 	]
 };
