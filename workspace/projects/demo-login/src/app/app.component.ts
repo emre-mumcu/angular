@@ -4,11 +4,13 @@ import { NavComponent } from "../_components/nav/nav.component";
 import { AccountService } from '../_services/account.service';
 import { User } from '../_models/user-model';
 import { UserDetail } from '../_models/user-detail-model';
+import { NgxSpinnerComponent } from 'ngx-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
 	selector: 'app-root',
 	standalone: true,
-	imports: [RouterOutlet, NavComponent],
+	imports: [RouterOutlet, NavComponent, NgxSpinnerComponent],
 	templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {

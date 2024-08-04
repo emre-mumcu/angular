@@ -1,3 +1,61 @@
+# ngs-spinner
+
+Using npm (* this one is used):
+% npm i ngx-spinner
+
+Using angular-cli:
+% ng add ngx-spinner
+
+// angular.json
+{
+  "styles": [
+    "node_modules/ngx-spinner/animations/timer.css"
+  ]
+}
+
+Import BrowserAnimationsModule and NgxSpinnerModule
+
+// app.config.ts
+export const appConfig: ApplicationConfig = {
+	providers: [
+		importProvidersFrom(NgxSpinnerModule),
+		importProvidersFrom([BrowserAnimationsModule])
+	]
+};
+
+// create a service for spinner
+% ng g s _services/spinner
+
+# Interceptors
+
+ng g interceptor _inteceptors/loading --skip-tests
+
+Update app.config.ts
+
+export const appConfig: ApplicationConfig = {
+	providers: [
+
+		provideHttpClient(withInterceptors([loadingInterceptor])),
+
+	]
+};
+
+Add spinner component to app.component.ts
+
+<ngx-spinner>
+	<h3>Please Wait...</h3>
+</ngx-spinner>
+
+Import NgxSpinnerComponent in app.component.ts
+
+@Component({
+	selector: 'app-root',
+	standalone: true,
+	imports: [NgxSpinnerComponent],
+	templateUrl: './app.component.html'
+})
+export class AppComponent
+
 # ngClass
 
 <!-- Normal HTML -->
